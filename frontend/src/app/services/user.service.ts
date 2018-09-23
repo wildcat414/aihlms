@@ -102,7 +102,7 @@ export class UserService {
     );
   }
 
-  // do przeniesienia do book service
+
   public getAllMyBooks(): Observable<ApiResponse> {
     const url = this.getBooksURL;
     const body = JSON.stringify( {
@@ -118,7 +118,7 @@ export class UserService {
     );
   }
 
-  // do przeniesienia do book service
+
   public getBorrowedBooks(fromMeToOthers: boolean): Observable<ApiResponse> {
     const url = this.getBorrowingsURL;
     const body = JSON.stringify( {
@@ -134,7 +134,7 @@ export class UserService {
     );
   }
 
-  // do przeniesienia do book service
+
   public addBorrowing(newBorrowing: Borrowing): Observable<ApiResponse> {
     const url = this.addBorrowingURL;
     newBorrowing['userToken'] = this.currentUserToken.getValue();
@@ -146,7 +146,7 @@ export class UserService {
     );
   }
 
-  // do przeniesienia do book service
+
   public confirmBorrowingReturn(pbid: number): Observable<ApiResponse> {
     const url = this.confirmBorrowingReturnURL;
     const body = JSON.stringify( { borrowing_id: pbid, userToken: this.currentUserToken.getValue() } );
@@ -158,7 +158,7 @@ export class UserService {
     );
   }
 
-  // do przeniesienia do book service
+
   public addBook(newBook: Book): Observable<ApiResponse> {
     const url = this.addBookURL;
     newBook['userToken'] = this.currentUserToken.getValue();
