@@ -1,0 +1,28 @@
+<div class="row">
+  <div class="col"></div>
+  <div class="col-6">
+    <h1>Rejestracja</h1>
+    <form>
+      <div class="form-group">
+        <label for="inputEmailReg">E-mail</label>
+        <input type="email" class="form-control" id="inputEmailReg" name="nuemail" placeholder="Podaj adres e-mail..." [(ngModel)]="newUserEmail">
+      </div>
+      <div class="form-group">
+        <label for="inputLoginReg">Login</label>
+        <input type="text" class="form-control" id="inputLoginReg" name="nulogin" placeholder="Podaj login..." [(ngModel)]="newUserLogin">
+      </div>
+      <div class="form-group">
+        <label for="inputPasswordReg">Hasło</label>
+        <input type="password" class="form-control" id="inputPasswordReg" name="nupassword" placeholder="Podaj hasło..." [(ngModel)]="newUserPassword">
+      </div>
+      <div *ngIf="this.newUserReference != 0" class="form-group">
+        <label for="inputReferenceReg">ID użytkownika bazowego</label>
+        <input type="text" class="form-control" id="inputReferenceReg" name="nureference" [(ngModel)]="newUserReference" readonly>
+      </div>
+      <button type="button" class="btn btn-primary" (click)="registerUser()">Zarejestruj się</button>
+    </form>
+    <p-progressSpinner *ngIf="showSpinner"></p-progressSpinner>
+    <p>{{message}}</p>
+  </div>
+  <div class="col"></div>
+</div>

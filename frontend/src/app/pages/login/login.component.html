@@ -1,0 +1,21 @@
+<div class="row">
+  <div class="col"></div>
+  <div class="col-6">
+    <h1>Logowanie</h1>
+    <form>
+      <div class="form-group">
+        <label for="inputLogin">Login</label>
+        <input type="text" class="form-control" id="inputLogin" name="eulogin" placeholder="Wpisz login..." [(ngModel)]="existingUserLogin">
+      </div>
+      <div class="form-group">
+        <label for="inputPassword">Hasło</label>
+        <input type="password" class="form-control" id="inputPassword" name="eupassword" placeholder="Wpisz hasło..." [(ngModel)]="existingUserPassword">
+      </div>
+      <button type="button" class="btn btn-primary" (click)="loginUser()">Zaloguj się</button>
+    </form>
+    <p-progressSpinner *ngIf="showSpinner"></p-progressSpinner>
+    <h1 class="mt-5">Nie masz konta?</h1>
+    <button type="button" class="btn btn-primary" (click)="redirectToRegistration()">Zarejestruj się</button>
+  </div>
+  <div class="col"></div>
+</div>

@@ -1,0 +1,137 @@
+<div class="row">
+  <div class="col"></div>
+  <div class="col-10">
+    <h1>Moja biblioteka</h1>
+    <p-table [value]="books" [paginator]="true" [rows]="10" selectionMode="single" [(selection)]="selectedBook" sortField="author_surname">
+      <ng-template pTemplate="header">
+        <tr>
+          <th [pSortableColumn]="'author_surname'">
+            Autor
+            <p-sortIcon [field]="'author_surname'"></p-sortIcon>
+          </th>
+          <th [pSortableColumn]="'title'">
+            Tytuł
+            <p-sortIcon [field]="'title'"></p-sortIcon>
+          </th>
+          <th [pSortableColumn]="'publish_year'">
+            Rok wydania
+            <p-sortIcon [field]="'publish_year'"></p-sortIcon>
+          </th>
+          <th [pSortableColumn]="'publishing_house'">
+            Wydawnictwo
+            <p-sortIcon [field]="'publishing_house'"></p-sortIcon>
+          </th>
+          <th [pSortableColumn]="'owner_name'">
+            Właściciel
+            <p-sortIcon [field]="'owner_name'"></p-sortIcon>
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-rowData>
+        <tr [pSelectableRow]="rowData" (click)="showDetailsDialog()">
+          <td>{{rowData.author_forename}} {{rowData.author_surname}}</td>
+          <td>{{rowData.title}}</td>
+          <td>{{rowData.publish_year}}</td>
+          <td>{{rowData.publishing_house}}</td>
+          <td>{{rowData.owner_name != null ? rowData.owner_name : '(ja)'}}</td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="summary">
+        <div class="text-left">
+          <p-button label="Dodaj książkę" icon="fa fa-plus" (onClick)="showAddBookDialog($event)"></p-button>
+        </div>
+      </ng-template>
+    </p-table>
+  </div>
+  <div class="col"></div>
+</div>
+
+<p-dialog *ngIf="selectedBook" header="Szczegóły książki" [(visible)]="displayDetailsDialog" [modal]="true" [responsive]="true"
+  [width]="400" [minWidth]="200" [minY]="70" [baseZIndex]="10000">
+
+  <table class="table table-borderless">
+    <tbody>
+      <tr>
+        <th scope="row">ID:</th>
+        <td>{{selectedBook.book_id}}</td>
+      </tr>
+      <tr>
+        <th scope="row">Autor:</th>
+        <td>{{selectedBook.author_forename}} {{selectedBook.author_surname}}</td>
+      </tr>
+      <tr>
+        <th scope="row">Tytuł:</th>
+        <td>{{selectedBook.title}}</td>
+      </tr>
+      <tr>
+        <th scope="row">Rok wydania:</th>
+        <td>{{selectedBook.publish_year}}</td>
+      </tr>
+      <tr>
+        <th scope="row">Wydawnictwo:</th>
+        <td>{{selectedBook.publishing_house}}</td>
+      </tr>
+      <tr>
+        <th scope="row">ISBN:</th>
+        <td>{{selectedBook.isbn}}</td>
+      </tr>
+      <tr>
+        <th scope="row">Data dodania:</th>
+        <td>{{selectedBook.date_added}}</td>
+      </tr>
+      <tr>
+        <th scope="row">Wypożyczona od:</th>
+        <td>{{selectedBook.owner_name != null ? selectedBook.owner_name : '(moja książka)'}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <p-footer>
+    <p-button label="Usuń" icon="fa fa-times" (onClick)="deleteSelectedBook($event)"></p-button>
+  </p-footer>
+</p-dialog>
+
+
+<p-dialog header="Dodaj książkę" [(visible)]="displayAddBookDialog" [modal]="true" [responsive]="true" [width]="500" [minWidth]="200"
+  [minY]="70" [baseZIndex]="10000">
+  <div class="container-fluid">
+    <div class="row mb-3 mt-3">
+      <div class="col font-weight-bold">Imię autora:</div>
+      <div class="col">
+        <input pInputText type="text" size="32" [(ngModel)]="bookToAdd.author_forename">
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col font-weight-bold">Nazwisko autora:</div>
+      <div class="col">
+        <input pInputText type="text" size="32" [(ngModel)]="bookToAdd.author_surname">
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col font-weight-bold">Tytuł:</div>
+      <div class="col">
+        <input pInputText type="text" size="32" [(ngModel)]="bookToAdd.title">
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col font-weight-bold">Rok wydania:</div>
+      <div class="col">
+        <input pInputText type="text" size="32" [(ngModel)]="bookToAdd.publish_year">
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col font-weight-bold">Wydawnictwo:</div>
+      <div class="col">
+        <input pInputText type="text" size="32" [(ngModel)]="bookToAdd.publishing_house">
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col font-weight-bold">ISBN:</div>
+      <div class="col">
+        <input pInputText type="text" size="32" [(ngModel)]="bookToAdd.isbn">
+      </div>
+    </div>
+  </div>
+  <p-footer>
+    <p-button label="Zapisz" icon="fa fa-check" (onClick)="addNewBook()"></p-button>
+  </p-footer>
+</p-dialog>

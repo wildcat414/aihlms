@@ -1,0 +1,185 @@
+<div class="row">
+  <div class="col"></div>
+  <div class="col-10">
+    <h1>Książki wypożyczone innym</h1>
+    <p-table [value]="booksBorrowedToOthers" [paginator]="true" [rows]="10" selectionMode="single" [(selection)]="selectedBook"
+      sortField="author_surname">
+      <ng-template pTemplate="header">
+        <tr>
+          <th [pSortableColumn]="'author_surname'">
+            Autor
+            <p-sortIcon [field]="'author_surname'"></p-sortIcon>
+          </th>
+          <th [pSortableColumn]="'title'">
+            Tytuł
+            <p-sortIcon [field]="'title'"></p-sortIcon>
+          </th>
+          <th [pSortableColumn]="'date_borrowed'">
+            Data wypożyczenia
+            <p-sortIcon [field]="'data_borrowed'"></p-sortIcon>
+          </th>
+          <th [pSortableColumn]="'date_returned'">
+            Data zwrotu
+            <p-sortIcon [field]="'data_returned'"></p-sortIcon>
+          </th>
+          <th [pSortableColumn]="'borrower_name'">
+            Wypożyczone dla
+            <p-sortIcon [field]="'borrower_name'"></p-sortIcon>
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-rowData>
+        <tr [pSelectableRow]="rowData" (click)="showDetailsDialog()">
+          <td>{{rowData.author_forename}} {{rowData.author_surname}}</td>
+          <td>{{rowData.title}}</td>
+          <td>{{rowData.date_borrowed}}</td>
+          <td>{{rowData.date_returned}}</td>
+          <td>{{rowData.borrower_name != null ? rowData.borrower_name : rowData.borrower_external + ' (zewn.)'}}</td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="summary">
+        <div class="text-left">
+          <p-button label="Wypożycz książkę" icon="fa fa-plus" (onClick)="showBorrowBookDialog($event)"></p-button>
+        </div>
+      </ng-template>
+    </p-table>
+  </div>
+  <div class="col"></div>
+</div>
+
+<div class="row mt-5">
+  <div class="col"></div>
+  <div class="col-10">
+    <h1>Książki pożyczone od innych</h1>
+    <p-table [value]="booksBorrowedByMe" [paginator]="true" [rows]="10" selectionMode="single" [(selection)]="selectedBook" sortField="author_surname">
+      <ng-template pTemplate="header">
+        <tr>
+          <th [pSortableColumn]="'author_surname'">
+            Autor
+            <p-sortIcon [field]="'author_surname'"></p-sortIcon>
+          </th>
+          <th [pSortableColumn]="'title'">
+            Tytuł
+            <p-sortIcon [field]="'title'"></p-sortIcon>
+          </th>
+          <th [pSortableColumn]="'date_borrowed'">
+            Data wypożyczenia
+            <p-sortIcon [field]="'data_borrowed'"></p-sortIcon>
+          </th>
+          <th [pSortableColumn]="'date_returned'">
+            Data zwrotu
+            <p-sortIcon [field]="'data_returned'"></p-sortIcon>
+          </th>
+          <th [pSortableColumn]="'borrower_name'">
+            Wypożyczone od
+            <p-sortIcon [field]="'borrower_name'"></p-sortIcon>
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-rowData2>
+        <tr [pSelectableRow]="rowData2" (click)="showDetailsDialog()">
+          <td>{{rowData2.author_forename}} {{rowData2.author_surname}}</td>
+          <td>{{rowData2.title}}</td>
+          <td>{{rowData2.date_borrowed}}</td>
+          <td>{{rowData2.date_returned}}</td>
+          <td>{{rowData2.borrower_name}}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+  <div class="col"></div>
+</div>
+
+<p-dialog *ngIf="selectedBook" header="Informacje szczegółowe" [(visible)]="displayDetailsDialog" [modal]="true" [responsive]="true"
+  [width]="400" [minWidth]="200" [minY]="70" [baseZIndex]="10000">
+
+  <table class="table table-borderless">
+    <tbody>
+      <tr>
+        <th scope="row">ID:</th>
+        <td>{{selectedBook.book_id}}</td>
+      </tr>
+      <tr>
+        <th scope="row">Autor:</th>
+        <td>{{selectedBook.author_forename}} {{selectedBook.author_surname}}</td>
+      </tr>
+      <tr>
+        <th scope="row">Tytuł:</th>
+        <td>{{selectedBook.title}}</td>
+      </tr>
+      <tr>
+        <th scope="row">Rok wydania:</th>
+        <td>{{selectedBook.publish_year}}</td>
+      </tr>
+      <tr>
+        <th scope="row">Wydawnictwo:</th>
+        <td>{{selectedBook.publishing_house}}</td>
+      </tr>
+      <tr>
+        <th scope="row">ISBN:</th>
+        <td>{{selectedBook.isbn}}</td>
+      </tr>
+      <tr>
+        <th scope="row">Data dodania:</th>
+        <td>{{selectedBook.date_added}}</td>
+      </tr>
+      <tr>
+        <th scope="row">Data wypożyczenia:</th>
+        <td>{{selectedBook.date_borrowed}}</td>
+      </tr>
+      <tr>
+        <th scope="row">Data zwrotu:</th>
+        <td>{{selectedBook.date_returned}}</td>
+      </tr>
+      <tr>
+        <th scope="row">Zwrot potwierdzony:</th>
+        <td>{{selectedBook.return_confirmed == 0 ? "nie" : "tak"}}</td>
+      </tr>
+      <tr *ngIf="selectedBook.borrower != currentUserId">
+        <th scope="row">Pożyczający:</th>
+        <td>{{selectedBook.borrower_name != null ? selectedBook.borrower_name : selectedBook.borrower_external + ' (zewn.)' }}</td>
+      </tr>
+      <tr *ngIf="selectedBook.borrower == currentUserId">
+        <th scope="row">Pożyczający:</th>
+        <td>{{selectedBook.borrower_name }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <p-footer>
+    <p-button *ngIf="selectedBook.borrower != currentUserId" label="Potwierdź zwrot" icon="fa fa-check" (onClick)="confirmSelectedBookReturn($event)"></p-button>
+  </p-footer>
+</p-dialog>
+
+
+<p-dialog header="Wypożycz książkę" [(visible)]="displayBorrowBookDialog" [modal]="true" [responsive]="true" [width]="800"
+  [minWidth]="200" [minY]="70" [baseZIndex]="10000">
+  <div class="container-fluid">
+    <div class="row mb-3 mt-3">
+      <div class="col font-weight-bold">Książka do wypożyczenia:</div>
+      <div class="col">
+        <p-dropdown [options]="allMyBooks" [(ngModel)]="newBorrowing.book" placeholder="Wybierz książkę" [showClear]="true"></p-dropdown>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col font-weight-bold">Wypożyczam użytkownikowi:</div>
+      <div class="col">
+        <p-dropdown [options]="users" [(ngModel)]="newBorrowing.borrower" placeholder="Wybierz użytkownika" [showClear]="true"></p-dropdown>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col font-weight-bold">Wypożyczam innej osobie:</div>
+      <div class="col">
+        <input pInputText type="text" size="32" [(ngModel)]="newBorrowing.borrower_external">
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col font-weight-bold">Data zwrotu:</div>
+      <div class="col">
+        <input pInputText type="text" size="32" [(ngModel)]="newBorrowing.date_returned">
+      </div>
+    </div>
+  </div>
+  <p-footer>
+    <p-button label="Wypożycz" icon="fa fa-check" (onClick)="saveNewBorrowing()"></p-button>
+  </p-footer>
+</p-dialog>
